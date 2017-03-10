@@ -16,8 +16,17 @@ install_xfce() {
 }
 
 enable_sys_graphic() {
-  echo "> systemctl: enabling graphical target. Note: reboot required!"
-  systemctl set-default graphical.target
+  NEW_TARGET='graphical.target'
+
+  echo "> systemctl: checking default target..."
+  CURR_TARGET=$(systemctl get-default | grep ${NEW_TARGET})
+
+  if [ -n "${CURR_TARGET}" ] ; then
+    echo " > enabling graphical.target. Note: reboot required!"
+    systemctl set-default ${GRAPHICAL_TARGET}
+  else
+    echo " > already set to graphical.target"
+  fi;
 }
 
 #enable_xfce_session() {
