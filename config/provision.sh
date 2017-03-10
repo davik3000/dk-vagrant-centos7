@@ -21,9 +21,9 @@ function sourceFile()
   fi;
 }
 
-function configureProxy()
+function configureNetwork()
 {
-  local FILEPATH="${SCRIPT_DIR}/applyProxySettings.sh"
+  local FILEPATH="${SCRIPT_DIR}/configureNetwork.sh"
   sourceFile ${FILEPATH}
 }
 function updatePackages()
@@ -50,7 +50,7 @@ function installXfce()
 function executeProvision()
 {
   if [ -d ${SCRIPT_DIR} ] ; then
-    configureProxy
+    configureNetwork
 
     # perform a silent upgrade of the system
     updatePackages

@@ -36,7 +36,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     main.vm.provider :virtualbox do |vb|
       vb.memory = "4096"
       vb.name = "vagrant-centos7-xfce"
-      vb.cpus = 2
+      vb.cpus = 4
+
+      vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
 
       vb.gui = true
     end
