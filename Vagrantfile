@@ -27,17 +27,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 >>>>>>> d3ce079... Fixed previous commit
   config.vm.box = "davik3000/CentOS-7"
 
+  # vbguest: the plugin should take the Guest Additions from remote or local installation
   #config.vbguest.no_remote = true
   
   config.vm.define "main", primary: true do |main|
     main.vm.hostname = "main.example.com"
     main.vm.synced_folder ".", "/vagrant", disabled: true
+    main.vm.synced_folder "./vboxsf", "/opt/vboxsf", create: true
     
     main.vm.provider :virtualbox do |vb|
       vb.memory = "4096"
       vb.name = "vagrant-centos7-xfce"
       vb.cpus = 4
 
+      # set the host as dns resolver
       vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
 
       vb.gui = true
