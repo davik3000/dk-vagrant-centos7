@@ -41,6 +41,11 @@ function speedupGrub2Boot()
   local FILEPATH="${SCRIPT_DIR}/speedupGrub2Boot.sh"
   sourceFile ${FILEPATH}
 }
+function applyMotD()
+{
+  local FILEPATH="${SCRIPT_DIR}/applyMotD.sh"
+  sourceFile ${FILEPATH}
+}
 function installXfce()
 {
   local FILEPATH="${SCRIPT_DIR}/installXfce.sh"
@@ -58,6 +63,8 @@ function executeProvision()
     fixSlowSSH
     
     speedupGrub2Boot
+
+    applyMotD
 
     installXfce
   else
