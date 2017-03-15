@@ -27,7 +27,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 >>>>>>> d3ce079... Fixed previous commit
   config.vm.box = "davik3000/CentOS-7"
 
-  # vbguest: the plugin should take the Guest Additions from remote or local installation
+  # vbguest: Should the plugin take the Guest Additions from remote or local installation? (default: remote)
   #config.vbguest.no_remote = true
   
   config.vm.define "main", primary: true do |main|
