@@ -6,6 +6,7 @@ echo "
 #####################
 # dk-vagrant-centos #
 #####################
+Host: ${HOSTNAME}
 
 " > /etc/motd
 
