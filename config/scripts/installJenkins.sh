@@ -28,9 +28,15 @@ installJenkins() {
   ${SUDOCMD} yum install -y -q jenkins
 }
 
+configureJenkins() {
+  ${SUDOCMD} service jenkins start
+  ${SUDOCMD} chkconfig jenkins on
+}
+
 ########
 # Main #
 ########
 installJenkins
+#configureJenkins
 
 echo "-----"
