@@ -1,29 +1,40 @@
 #!/bin/bash
 
+#################################
+# Global settings
+CONFIG_DIR=
+
+WHOAMI=$(whoami)
+SUDOCMD=""
+if [ "${WHOAMI}" != "root" ] ; then
+  SUDOCMD="sudo -E"
+fi
+#################################
+
 #############
 # Functions #
 #############
 install_xfce() {
   echo "Installing Xfce"
   echo "> yum: install epel-release"
-  sudo yum install -y -q epel-release
+  ${SUDOCMD} yum install -y -q epel-release
   
   echo "> yum: install 'Server with GUI'"
-  sudo yum groups install -y -q "Server with GUI"
+  ${SUDOCMD} yum groups install -y -q "Server with GUI"
   
   echo "> yum: install Xfce"
-  sudo yum groups install -y -q "Xfce"
+  ${SUDOCMD} yum groups install -y -q "Xfce"
 }
 
 enable_sys_graphic() {
   NEW_TARGET='graphical.target'
 
   echo "> systemctl: checking default target..."
-  CURR_TARGET=$(systemctl get-default | grep ${NEW_TARGET})
+  CURR_TARGET=$(${SUDOCMD} systemctl get-default | grep ${NEW_TARGET})
 
   if [ -z "${CURR_TARGET}" ] ; then
     echo " > enabling graphical.target. Note: reboot required!"
-    systemctl set-default ${NEW_TARGET}
+    ${SUDOCMD} systemctl set-default ${NEW_TARGET}
   else
     echo " > already set to graphical.target"
   fi;
