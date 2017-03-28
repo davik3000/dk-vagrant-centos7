@@ -51,6 +51,16 @@ function installXfce()
   local FILEPATH="${SCRIPTS_DIR}/installXfce.sh"
   sourceFile ${FILEPATH}
 }
+function installDocker()
+{
+  local FILEPATH="${SCRIPTS_DIR}/installDocker.sh"
+  sourceFile ${FILEPATH}
+}
+function installJenkins()
+{
+  local FILEPATH="${SCRIPTS_DIR}/installJenkins.sh"
+  sourceFile ${FILEPATH}
+}
 
 function executeProvision()
 {
