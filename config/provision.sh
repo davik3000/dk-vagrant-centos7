@@ -2,7 +2,7 @@
 
 #################################
 # Global settings
-SCRIPT_DIR=
+SCRIPTS_DIR=
 #################################
 
 #############
@@ -15,7 +15,7 @@ function sourceFile()
   echo "Executing: ${FILEPATH}"
 
   if [ -e ${FILEPATH} ] ; then
-    source ${FILEPATH} "${SCRIPT_DIR}"
+    source ${FILEPATH} "${SCRIPTS_DIR}"
   else
     echo "Error: cannot find ${FILEPATH}. Skipping..."
   fi;
@@ -23,38 +23,38 @@ function sourceFile()
 
 function configureNetwork()
 {
-  local FILEPATH="${SCRIPT_DIR}/configureNetwork.sh"
+  local FILEPATH="${SCRIPTS_DIR}/configureNetwork.sh"
   sourceFile ${FILEPATH}
 }
 function updatePackages()
 {
-  local FILEPATH="${SCRIPT_DIR}/updateYumPackages.sh"
+  local FILEPATH="${SCRIPTS_DIR}/updateYumPackages.sh"
   sourceFile ${FILEPATH}
 }
 function fixSlowSSH()
 {
-  local FILEPATH="${SCRIPT_DIR}/fixSlowSSH.sh"
+  local FILEPATH="${SCRIPTS_DIR}/fixSlowSSH.sh"
   sourceFile ${FILEPATH}
 }
 function speedupGrub2Boot()
 {
-  local FILEPATH="${SCRIPT_DIR}/speedupGrub2Boot.sh"
+  local FILEPATH="${SCRIPTS_DIR}/speedupGrub2Boot.sh"
   sourceFile ${FILEPATH}
 }
 function applyMotD()
 {
-  local FILEPATH="${SCRIPT_DIR}/applyMotD.sh"
+  local FILEPATH="${SCRIPTS_DIR}/applyMotD.sh"
   sourceFile ${FILEPATH}
 }
 function installXfce()
 {
-  local FILEPATH="${SCRIPT_DIR}/installXfce.sh"
+  local FILEPATH="${SCRIPTS_DIR}/installXfce.sh"
   sourceFile ${FILEPATH}
 }
 
 function executeProvision()
 {
-  if [ -d ${SCRIPT_DIR} ] ; then
+  if [ -d ${SCRIPTS_DIR} ] ; then
     configureNetwork
 
     # perform a silent upgrade of the system
@@ -69,7 +69,7 @@ function executeProvision()
     installXfce
   else
     echo "-----"
-    echo "Error: folder ${SCRIPT_DIR} doesn't not exist!"
+    echo "Error: folder ${SCRIPTS_DIR} doesn't not exist!"
     exit 1
   fi;
 }
@@ -80,7 +80,7 @@ function executeProvision()
 
 # use argument for scripts folder path
 if [ -n $1 ] ; then
-  SCRIPT_DIR=$1
+  SCRIPTS_DIR=$1
 fi;
 
 executeProvision
