@@ -10,16 +10,16 @@ JENKINS_KEY_URL="https://pkg.jenkins.io/redhat/jenkins.io.key"
 install_jenkins() {
   echo "Installing Jenkins"
   echo "> yum: install epel-release"
-  sudo yum install -y -q epel-release
+  sudo -E yum install -y -q epel-release
   
-  echo "> wget: add Jenkins repository to yum"
-  sudo wget -O "${JENKINS_REPO_PATH}" "${JENKINS_REPO_URL}"
+  echo "> wget: add Jenkins repository to /etc/yum.repos.d"
+  sudo -E wget -q -O "${JENKINS_REPO_PATH}" "${JENKINS_REPO_URL}"
   
   echo "> yum: import Jenkins GPG key"
-  sudo rpm --import "${JENKINS_KEY_URL}"
+  sudo -E rpm --import "${JENKINS_KEY_URL}"
 
   echo "> yum: install Jenkins"
-  sudo yum install jenkins
+  sudo -E yum install -y -q jenkins
 }
 
 ########
