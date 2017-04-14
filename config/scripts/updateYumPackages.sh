@@ -41,6 +41,7 @@ updatePackages_installUtils() {
     ntp \
     telnet \
     gcc \
+	screen \
     dos2unix
 }
 updatePackages() {
