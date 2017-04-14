@@ -124,6 +124,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     main.vm.synced_folder _sharedFolder_config_hostPath, _sharedFolder_config_guestPath, create: true
     main.vm.synced_folder _sharedFolder_vboxsf_hostPath, _sharedFolder_vboxsf_guestPath, create: true
 
+    main.vm.network "forwarded_port", host: 8001, guest: 8001
+    main.vm.network "forwarded_port", host: 8002, guest: 8002
+    main.vm.network "forwarded_port", host: 8003, guest: 8003
+    main.vm.network "forwarded_port", host: 8004, guest: 8004
+    main.vm.network "forwarded_port", host: 8005, guest: 8005
+    main.vm.network "forwarded_port", host: 8080, guest: 8080
+
     main.vm.provider :virtualbox do |vb|
       vb.memory = "4096"
       vb.name = "vagrant-centos7-xfce"
