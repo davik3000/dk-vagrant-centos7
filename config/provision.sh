@@ -95,8 +95,4 @@ fi;
 
 executeProvision
 
-<<<<<<< HEAD
 exit $?
-=======
-exit $?
->>>>>>> d3ce079... Fixed previous commit
