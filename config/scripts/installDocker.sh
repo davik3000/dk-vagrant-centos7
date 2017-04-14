@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#set -x
+
 #################################
 # Global settings
 CONFIG_DIR=
@@ -9,6 +11,8 @@ SUDOCMD=""
 if [ "${WHOAMI}" != "root" ] ; then
   SUDOCMD="sudo -E"
 fi
+
+QUIET="-q"
 #################################
 
 #################################
@@ -40,11 +44,11 @@ installDockerPackage_setDockerRepo() {
   echo "-----"
   echo "Adding docker repository"
   echo "> yum: install epel-release"
-  ${SUDOCMD} yum install -y -q epel-release
+  ${SUDOCMD} yum install -y ${QUIET} epel-release
   echo "> yum: install yum-utils"
-  ${SUDOCMD} yum install -y -q yum-utils
+  ${SUDOCMD} yum install -y ${QUIET} yum-utils
   echo "> yum: install docker.repo with yum-config-manager"
-  ${SUDOCMD} yum-config-manager -q -y --add-repo ${DOCKER_REPO_SRC_URL}
+  ${SUDOCMD} yum-config-manager -y ${QUIET} --add-repo ${DOCKER_REPO_SRC_URL}
 }
 
 installDockerPackage_applyFixForIssue25741() {
@@ -77,7 +81,7 @@ installDockerPackage_setProxyConfig() {
 }
 
 installDockerPackage_installDockerCE() {
-  ${SUDOCMD} yum install -y -q docker-ce
+  ${SUDOCMD} yum install -y ${QUIET} docker-ce
 }
 
 installDockerPackage_installDockerEngine() {
@@ -97,7 +101,7 @@ installDockerPackage_installDockerCompose() {
   echo "-----"
   echo "Installing docker compose v. ${DOCKER_COMPOSE_VERSION}"
   #curl -L ${DOCKER_COMPOSE_SRC_URL} -o ${DOCKER_COMPOSE_DST_PATH}
-  ${SUDOCMD} wget -q -O ${DOCKER_COMPOSE_DST_PATH} ${DOCKER_COMPOSE_SRC_URL}
+  ${SUDOCMD} wget ${QUIET} -O ${DOCKER_COMPOSE_DST_PATH} ${DOCKER_COMPOSE_SRC_URL}
   ${SUDOCMD} chown root:root ${DOCKER_COMPOSE_DST_PATH}
   ${SUDOCMD} chmod +x ${DOCKER_COMPOSE_DST_PATH}
 }
@@ -157,6 +161,8 @@ fi;
 
 if [ -d "${CONFIG_DIR}" ] ; then
   installDockerPackage
+else
+  echo "Missing config dir as argument"
 fi;
 
 echo "-----"
