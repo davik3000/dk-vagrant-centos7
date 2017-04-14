@@ -1,44 +1,85 @@
 #!/bin/bash
 
-update_yum() {
-  echo "> yum: update"
-  sudo yum update -y -q
-}
+#################################
+# Global settings
+SCRIPT_DIR=
+#################################
 
-install_xfce() {
-  echo "> yum: install epel-release"
-  sudo yum install -y -q epel-release
-  
-  echo "> yum: install 'Server with GUI'"
-  sudo yum groups install -y -q "Server with GUI"
-  
-  echo "> yum: install Xfce"
-  sudo yum groups install -y -q "Xfce"
-}
+#############
+# Functions #
+#############
+function sourceFile()
+{
+  FILEPATH=$1
+  echo "-----"
+  echo "Executing: ${FILEPATH}"
 
-enable_sys_graphic() {
-  systemctl set-default graphical.target
-}
-
-enable_xfce_session() {
-  echo "> enabling Xfce session"
-  
-  EXEC_XFCE_SESSION="exec /usr/bin/xfce4-session"
-  XINITRC_PATH=/root/.xinitrc
-  XFCE_EXIST=
-  
-  if [ -f ${XINITRC_PATH} ] ; then
-    echo " > detected xinitrc"
-    XFCE_EXIST=$(grep -ce '^exec.*xfce4-session$' ${XINITRC_PATH})
+  if [ -e ${FILEPATH} ] ; then
+    source ${FILEPATH} "${SCRIPT_DIR}"
+  else
+    echo "Error: cannot find ${FILEPATH}. Skipping..."
   fi;
-  
-  if [ -eq ${XFCE_EXIST} 1 ] ; then
-    echo ${EXEC_XFCE_SESSION} >> ${XINITRC_PATH}
-  fi;
-  
-  sudo sed -i 's#allowed_users=.*$#allowed_users=anybody#' /etc/X11/Xwrapper.config
 }
 
-update_yum
-install_xfce
-enable_sys_graphic
+function configureProxy()
+{
+  local FILEPATH="${SCRIPT_DIR}/applyProxySettings.sh"
+  sourceFile ${FILEPATH}
+}
+function updatePackages()
+{
+  local FILEPATH="${SCRIPT_DIR}/updateYumPackages.sh"
+  sourceFile ${FILEPATH}
+}
+function fixSlowSSH()
+{
+  local FILEPATH="${SCRIPT_DIR}/fixSlowSSH.sh"
+  sourceFile ${FILEPATH}
+}
+function speedupGrub2Boot()
+{
+  local FILEPATH="${SCRIPT_DIR}/speedupGrub2Boot.sh"
+  sourceFile ${FILEPATH}
+}
+function installXfce()
+{
+  local FILEPATH="${SCRIPT_DIR}/installXfce.sh"
+  sourceFile ${FILEPATH}
+}
+
+function executeProvision()
+{
+  if [ -d ${SCRIPT_DIR} ] ; then
+    configureProxy
+
+    # perform a silent upgrade of the system
+    updatePackages
+
+    fixSlowSSH
+    
+    speedupGrub2Boot
+
+    installXfce
+  else
+    echo "-----"
+    echo "Error: folder ${SCRIPT_DIR} doesn't not exist!"
+    exit 1
+  fi;
+}
+
+########
+# Main #
+########
+
+# use argument for scripts folder path
+if [ -n $1 ] ; then
+  SCRIPT_DIR=$1
+fi;
+
+executeProvision
+
+<<<<<<< HEAD
+exit $?
+=======
+exit $?
+>>>>>>> d3ce079... Fixed previous commit
