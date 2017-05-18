@@ -42,9 +42,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "main", primary: true do |main|
     main.vm.hostname = "main.example.com"
     main.vm.synced_folder ".", "/vagrant", disabled: true
-    # custom shared folder
-    main.vm.synced_folder _sharedFolder_config_hostPath, _sharedFolder_config_guestPath, create: true
-    main.vm.synced_folder _sharedFolder_vboxsf_hostPath, _sharedFolder_vboxsf_guestPath, create: true
+
+    # check and exec only if plugin are not disabled
+    if Vagrant.has_plugin?("vagrant-vbguest")
+      # custom shared folder
+      main.vm.synced_folder _sharedFolder_config_hostPath, _sharedFolder_config_guestPath, create: true
+      main.vm.synced_folder _sharedFolder_vboxsf_hostPath, _sharedFolder_vboxsf_guestPath, create: true
+    end
 
     main.vm.network "forwarded_port", host: 8001, guest: 8001
     main.vm.network "forwarded_port", host: 8002, guest: 8002
@@ -54,9 +58,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     main.vm.network "forwarded_port", host: 8080, guest: 8080
 
     main.vm.provider :virtualbox do |vb|
-      vb.memory = "4096"
       vb.name = "vagrant-centos7-xfce"
       vb.cpus = 4
+      vb.memory = "4096"
 
       # set the host as dns resolver
       vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
@@ -84,3 +88,4 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 end
+
