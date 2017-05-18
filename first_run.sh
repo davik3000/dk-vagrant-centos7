@@ -3,6 +3,12 @@
 #set -x
 
 # Functions
+exec_vagrant_destroy() {
+  echo "-----"
+  echo "Destroy machines"
+  vagrant destroy $@
+  return $?
+}
 exec_vagrant_halt() {
   echo "-----"
   echo "Halt running machines"
@@ -44,6 +50,23 @@ exec_vagrant_wPlugin() {
   return $?
 }
 
+manage_previous_vm() {
+  local destroyed=
+  local vagrant_hidden_folder=".vagrant"
+
+  if [ -d "${vagrant_hidden_folder}" ] ; then
+    echo "-----"
+    echo "Detected .vagrant folder"
+    exec_vagrant_destroy $@
+    destroyed=1
+  fi
+
+  if [ -n "${destroyed}" ] ; then
+    exec_vagrant_halt $@
+  fi
+  return $?
+}
+
 exiting() {
   echo "-----"
   echo "Errors occurred during execution. Exiting..."
@@ -51,7 +74,7 @@ exiting() {
 }
 
 # Main
-exec_vagrant_halt $@
+manage_previous_vm $@
 
 if [ $? -eq 0 ] ; then
   exec_vagrant_woPlugins $@
