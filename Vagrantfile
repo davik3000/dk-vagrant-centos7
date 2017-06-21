@@ -8,26 +8,26 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # #####
   # configuration variables
   # #####
-  _config = "config"
+  _provision = ".provision"
   _vboxsf = "vboxsf"
 
   _provisionFolder_hostPath = "./"
   _provisionFolder_guestPath = "/tmp/vagrant/"
 
-  _provisionFolder_config_hostPath = _provisionFolder_hostPath + _config
-  _provisionFolder_config_guestPath = _provisionFolder_guestPath + _config
-  _provisionFolder_scripts_guestPath = _provisionFolder_config_guestPath + "/scripts"
+  _provisionFolder_provision_hostPath = _provisionFolder_hostPath + _provision
+  _provisionFolder_provision_guestPath = _provisionFolder_guestPath + _provision
+  _provisionFolder_scripts_guestPath = _provisionFolder_provision_guestPath + "/scripts"
 
-  _provisionScript_clean_hostPath = _provisionFolder_config_hostPath + "/clean.sh"
-  _provisionScript_clean_args = _provisionFolder_config_guestPath
+  _provisionScript_clean_hostPath = _provisionFolder_provision_hostPath + "/clean.sh"
+  _provisionScript_clean_args = _provisionFolder_provision_guestPath
 
-  _provisionScript_provision_hostPath = _provisionFolder_config_hostPath + "/provision.sh"
+  _provisionScript_provision_hostPath = _provisionFolder_provision_hostPath + "/provision.sh"
   _provisionScript_provision_args = _provisionFolder_scripts_guestPath
 
   _sharedFolder_hostPath = "./"
   _sharedFolder_guestPath = "/opt/vagrant/"
-  _sharedFolder_config_hostPath = _sharedFolder_hostPath + _config
-  _sharedFolder_config_guestPath = _sharedFolder_guestPath + _config
+  _sharedFolder_provision_hostPath = _sharedFolder_hostPath + _provision
+  _sharedFolder_provision_guestPath = _sharedFolder_guestPath + _provision
   _sharedFolder_vboxsf_hostPath = _sharedFolder_hostPath + _vboxsf
   _sharedFolder_vboxsf_guestPath = _sharedFolder_guestPath + _vboxsf
 
@@ -46,7 +46,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # check and exec only if plugin are not disabled
     if Vagrant.has_plugin?("vagrant-vbguest")
       # custom shared folder
-      main.vm.synced_folder _sharedFolder_config_hostPath, _sharedFolder_config_guestPath, create: true
+      main.vm.synced_folder _sharedFolder_provision_hostPath, _sharedFolder_provision_guestPath, create: true
       main.vm.synced_folder _sharedFolder_vboxsf_hostPath, _sharedFolder_vboxsf_guestPath, create: true
     end
 
@@ -78,8 +78,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
     # DART send config
     main.vm.provision :file do |f|
-      f.source = _provisionFolder_config_hostPath
-      f.destination = _provisionFolder_config_guestPath
+      f.source = _provisionFolder_provision_hostPath
+      f.destination = _provisionFolder_provision_guestPath
     end
     # DART apply config
     main.vm.provision :shell do |s|
