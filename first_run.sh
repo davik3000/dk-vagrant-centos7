@@ -5,7 +5,7 @@
 # Functions
 exec_vagrant_destroy() {
   echo "-----"
-  echo "Destroy machines"
+  echo "Destroy machines?"
   vagrant destroy $@
   return $?
 }
@@ -40,7 +40,7 @@ exec_vagrant_provision() {
 }
 exec_vagrant_wPlugin() {
   echo "-----"
-  echo "Reboot the nodes (and apply guest addition through plugin)"
+  echo "Reboot the nodes (and apply VirtualBox Guest Addition through plugin)"
 
   echo " > enabling Vagrant plugins"
   enable_vagrant_plugins
